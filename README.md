@@ -1,8 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
+To start app you need to be in "my-app" folder and run next comand:
 
 ```bash
 npm run dev
@@ -12,27 +10,35 @@ yarn dev
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## About my project
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+As it is small project I decided to initialize styled component in the same file where they used. Their number is small.
+Therefore, they do not interfere either visually or practically.
+If it was bigger project I would do some folders logic and architecture, and put styled components in separate folders according to project logic, so anybody can ease reuse any component, and it
+would be easy to find it even without search.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Potential enhancements or optimizations
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Questions categories
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+There could be different categories like Math, Geography, Films, etc.
 
-## Learn More
+### Achievements
 
-To learn more about Next.js, take a look at the following resources:
+Some kind of achievements could be possible to add to this project as future feature. Like "Finish 5 quizzes without
+wrong answers" or "Complete 2 quizzes in "some" category".
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Global rating table
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+It could be global multiplayer, not only on single machine. And it could be global rating table with a lot of players.
 
-## Deploy on Vercel
+### Quiz improvements
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+It is possible to add feature that user can switch between questions and answer them lately or just completely skip
+them.
+Also, there may be hints. These hints may be paid or available for some specific actions like getting achievements.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Design
+
+As it is only test task, so it has simple design. But in the future it can be improved, and it should be improved. Also,
+should be added some animations and other interactive items.

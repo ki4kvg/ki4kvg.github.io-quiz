@@ -9,12 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.15",
+    "@nhost/nextjs": "^1.13.27",
+    "@nhost/react-apollo": "^5.0.25",
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
     "@types/react-dom": "18.2.4",
+    "evergreen-ui": "^7.1.8",
+    "graphql": "^16.6.0",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "styled-components": "^6.0.0-rc.3",
     "typescript": "5.1.3"
   }
 }
