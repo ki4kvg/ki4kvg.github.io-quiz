@@ -4,55 +4,49 @@ import { TAnswer, TCheckedAnswer, TQuestion } from "@/types/types";
 import { FC, useEffect, useState } from "react";
 
 type TProps = {
-    question: TQuestion,
-    currentQuestionNumber: number,
-    setCurrentQuestionNumber: (cb: (a: number) => number) => void,
-    setAnswers: (cb: (prevState: TCheckedAnswer[] | []) => TCheckedAnswer[]) => void,
-    evaluateSolutions: () => void,
-    setIsLoading: (a: boolean) => void,
-    isLoading: boolean,
+    questions: TQuestion[],
+    evaluateSolutions: (solutions: TCheckedAnswer[], setIsLoading: (a: boolean) => void) => void,
 }
-export const Question: FC<TProps> = ({
-                                         question,
-                                         currentQuestionNumber,
-                                         setCurrentQuestionNumber,
-                                         setAnswers,
-                                         evaluateSolutions,
-                                         setIsLoading,
-                                         isLoading
-                                     }) => {
+export const Question: FC<TProps> = ({questions, evaluateSolutions}) => {
 
     const [checkedAnswerID, setCheckedAnswerID] = useState<string>('')
+    const [solutions, setSolutions] = useState<TCheckedAnswer[]>([])
+    const [currentQuestionNumber, setCurrentQuestionNumber] = useState<number>(0)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const questionsAmount = questions.length-1
+
     const setNewAnswer = () => {
         const answer: TCheckedAnswer = {
-            question_id: question.id,
+            question_id: questions[currentQuestionNumber].id,
             answer_id: checkedAnswerID,
         }
-        setAnswers((prevState) => [...prevState, answer])
+        setSolutions((prevState) => [...prevState, answer])
     }
     const handleNextQuestion = () => {
-        if (currentQuestionNumber < 6) {
+        if (currentQuestionNumber < questionsAmount) {
             setNewAnswer()
             setCurrentQuestionNumber((prevState) => prevState + 1)
             setCheckedAnswerID('')
         }
-        if (currentQuestionNumber === 6 && checkedAnswerID != '') {
-             setIsLoading(true)
-             evaluateSolutions()
+        if (currentQuestionNumber === questionsAmount && checkedAnswerID != '') {
+            setIsLoading(true)
+            evaluateSolutions(solutions, setIsLoading)
         }
     }
 
-    useEffect(()=> {
-        if (currentQuestionNumber === 6 && checkedAnswerID != ''){
+    useEffect(() => {
+        if (currentQuestionNumber === questionsAmount && checkedAnswerID != '') {
             setNewAnswer()
         }
     }, [checkedAnswerID])
 
     return (
         <QuestionWrapper>
-            <Text color="white" fontSize="18px">{currentQuestionNumber+1 + ". " + question.question}</Text>
+            <Text color="white"
+                  fontSize="18px">{currentQuestionNumber + 1 + ". " + questions[currentQuestionNumber].question}</Text>
             <AnswerWrapper>
-                {question.answers.map((answer: TAnswer) => {
+                {questions[currentQuestionNumber].answers.map((answer: TAnswer) => {
                     return (
                         <>
                             <Checkbox
@@ -68,7 +62,7 @@ export const Question: FC<TProps> = ({
             <IconButton
                 disabled={checkedAnswerID === '' || isLoading}
                 size="large"
-                icon={currentQuestionNumber === 6 ? ConfirmIcon : ArrowRightIcon}
+                icon={currentQuestionNumber === questionsAmount ? ConfirmIcon : ArrowRightIcon}
                 onClick={handleNextQuestion}/>
         </QuestionWrapper>
     )

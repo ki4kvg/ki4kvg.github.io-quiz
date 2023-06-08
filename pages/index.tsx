@@ -4,8 +4,8 @@ import styles from '@/styles/Home.module.css'
 import { Button, Pane, Text } from "evergreen-ui";
 import { useRouter } from "next/router";
 import { Routes } from "@/routes/routes";
-import { useEffect, useState } from "react";
 import styled from "styled-components";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -13,12 +13,7 @@ export default function Home() {
 
     const router = useRouter();
 
-    const localScore = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("score") || '[]') : null
-    const [score, setScore] = useState<Array<string>>()
-
-    useEffect(() => {
-        localScore && setScore(localScore)
-    }, localScore)
+    const localScore: string[] = useLocalStorage("score")
 
     return (
         <>
@@ -29,10 +24,10 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
-                {score?.length &&
+                {localScore?.length &&
                     <ScoreWrapper>
                         <Text color="white" fontSize="18px">Score</Text>
-                        {score.map((score: string) => {
+                        {localScore.map((score: string) => {
                             return (
                                 <>
                                     <Divider/>

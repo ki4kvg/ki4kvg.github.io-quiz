@@ -4,16 +4,16 @@ import type { AppProps } from 'next/app'
 import { NhostClient, NhostProvider } from '@nhost/nextjs'
 import { NhostApolloProvider } from '@nhost/react-apollo'
 
-export const nhost = new NhostClient({
-    subdomain: "pczebmvrovjkvzfofmvz",
-    region: "eu-central-1",
-    graphqlUrl: 'https://pczebmvrovjkvzfofmvz.hasura.eu-central-1.nhost.run/v1/graphql',
+export const nhostClient = new NhostClient({
+    subdomain: process.env.NEXT_PUBLIC_NHOST_SUBDOMAIN,
+    region: process.env.NEXT_PUBLIC_NHOST_REGION,
+    graphqlUrl: process.env.NEXT_PUBLIC_NHOST_GRAPHQL_URL,
 })
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-      <NhostProvider nhost={nhost}>
-        <NhostApolloProvider nhost={nhost}>
+      <NhostProvider nhost={nhostClient}>
+        <NhostApolloProvider nhost={nhostClient}>
           <Component {...pageProps} />
         </NhostApolloProvider>
       </NhostProvider>
