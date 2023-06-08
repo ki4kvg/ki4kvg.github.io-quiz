@@ -1,7 +1,7 @@
 import { ArrowRightIcon, Checkbox, ConfirmIcon, IconButton, Pane, Text } from "evergreen-ui";
 import styled from "styled-components";
 import { TAnswer, TCheckedAnswer, TQuestion } from "@/types/types";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 
 type TProps = {
     questions: TQuestion[],
@@ -9,37 +9,40 @@ type TProps = {
 }
 export const Question: FC<TProps> = ({questions, evaluateSolutions}) => {
 
-    const [checkedAnswerID, setCheckedAnswerID] = useState<string>('')
+    const [checkedAnswerID, setCheckedAnswerID] = useState('')
     const [solutions, setSolutions] = useState<TCheckedAnswer[]>([])
-    const [currentQuestionNumber, setCurrentQuestionNumber] = useState<number>(0)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const questionsAmount = questions.length-1
-
-    const setNewAnswer = () => {
-        const answer: TCheckedAnswer = {
-            question_id: questions[currentQuestionNumber].id,
+    const answer = useMemo(
+        () => ({
+            question_id: questions[currentQuestionNumber]?.id || '',
             answer_id: checkedAnswerID,
+        }),
+        [currentQuestionNumber, checkedAnswerID]
+    );
+
+    const setNewAnswer = useCallback(() => {
+        setSolutions(prevState => [...prevState, answer]);
+    }, [answer]);
+
+    const handleNextQuestion = useCallback(() => {
+        if (currentQuestionNumber < questions.length-1) {
+            setNewAnswer();
+            setCurrentQuestionNumber((prevState) => prevState + 1);
+            setCheckedAnswerID('');
         }
-        setSolutions((prevState) => [...prevState, answer])
-    }
-    const handleNextQuestion = () => {
-        if (currentQuestionNumber < questionsAmount) {
-            setNewAnswer()
-            setCurrentQuestionNumber((prevState) => prevState + 1)
-            setCheckedAnswerID('')
+        if (currentQuestionNumber === questions.length-1 && checkedAnswerID !== '') {
+            setIsLoading(true);
+            evaluateSolutions(solutions, setIsLoading);
         }
-        if (currentQuestionNumber === questionsAmount && checkedAnswerID != '') {
-            setIsLoading(true)
-            evaluateSolutions(solutions, setIsLoading)
-        }
-    }
+    }, [currentQuestionNumber, checkedAnswerID, setNewAnswer, solutions]);
 
     useEffect(() => {
-        if (currentQuestionNumber === questionsAmount && checkedAnswerID != '') {
-            setNewAnswer()
+        if (currentQuestionNumber === questions.length-1 && checkedAnswerID !== '') {
+            setNewAnswer();
         }
-    }, [checkedAnswerID])
+    }, [currentQuestionNumber, checkedAnswerID, setNewAnswer]);
 
     return (
         <QuestionWrapper>
@@ -62,7 +65,7 @@ export const Question: FC<TProps> = ({questions, evaluateSolutions}) => {
             <IconButton
                 disabled={checkedAnswerID === '' || isLoading}
                 size="large"
-                icon={currentQuestionNumber === questionsAmount ? ConfirmIcon : ArrowRightIcon}
+                icon={currentQuestionNumber === questions.length-1 ? ConfirmIcon : ArrowRightIcon}
                 onClick={handleNextQuestion}/>
         </QuestionWrapper>
     )
